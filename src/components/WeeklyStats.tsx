@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import './WeeklyStats.css';
 
 interface WeeklyStatRow {
   id: number;
@@ -57,20 +58,8 @@ const WeeklyStats: React.FC = () => {
   };
 
   return (
-    <div style={{
-      padding: '24px',
-      minHeight: '100vh',
-      backgroundColor: '#f3f5f8',
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
-    }}>
-      <div style={{
-        marginBottom: '24px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'flex-end',
-        flexWrap: 'wrap',
-        gap: '16px'
-      }}>
+    <div className="weekly-stats-page">
+      <div className="weekly-stats-header">
         <div>
           <h1 style={{
             fontSize: '26px',
@@ -87,13 +76,7 @@ const WeeklyStats: React.FC = () => {
             03 - 06 April 2026
           </p>
         </div>
-        <div style={{
-          background: 'white',
-          padding: '16px 22px',
-          borderRadius: '14px',
-          boxShadow: '0 14px 35px rgba(38, 63, 121, 0.08)',
-          border: '1px solid rgba(99, 126, 164, 0.12)'
-        }}>
+        <div className="weekly-stats-summary">
           <div style={{ fontSize: '12px', color: '#7a8aa6', marginBottom: '10px', fontWeight: 600 }}>
             Summary Totals
           </div>
@@ -106,26 +89,9 @@ const WeeklyStats: React.FC = () => {
         </div>
       </div>
 
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr',
-        gap: '20px'
-      }}>
-        <section style={{
-          background: 'white',
-          padding: '24px',
-          borderRadius: '18px',
-          boxShadow: '0 14px 38px rgba(52, 79, 123, 0.08)',
-          border: '1px solid #e3e8ef'
-        }}>
-          <div style={{
-            marginBottom: '20px',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            gap: '12px'
-          }}>
+      <div className="weekly-stats-sections">
+        <section className="weekly-stats-card">
+          <div className="weekly-stats-card-header">
             <div>
               <h2 style={{
                 margin: 0,
@@ -155,11 +121,7 @@ const WeeklyStats: React.FC = () => {
             </button>
           </div>
 
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-            gap: '16px'
-          }}>
+          <div className="weekly-stats-form-grid">
             <label style={{ display: 'grid', gap: '8px', fontSize: '14px', color: '#354155' }}>
               ED
               <input
@@ -259,21 +221,8 @@ const WeeklyStats: React.FC = () => {
           </div>
         </section>
 
-        <section style={{
-          background: 'white',
-          padding: '24px',
-          borderRadius: '18px',
-          boxShadow: '0 14px 38px rgba(52, 79, 123, 0.08)',
-          border: '1px solid #e3e8ef'
-        }}>
-          <div style={{
-            marginBottom: '16px',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            gap: '8px'
-          }}>
+        <section className="weekly-stats-card">
+          <div className="weekly-stats-card-header">
             <div>
               <h2 style={{
                 margin: 0,
@@ -295,12 +244,8 @@ const WeeklyStats: React.FC = () => {
             </span>
           </div>
 
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{
-              width: '100%',
-              minWidth: '780px',
-              borderCollapse: 'collapse'
-            }}>
+          <div className="weekly-stats-table-wrapper">
+            <table className="weekly-stats-table">
               <thead>
                 <tr style={{ backgroundColor: '#eef4ff' }}>
                   {['ED', 'Gender', 'Current B.C 2025', 'Current B.C 2026', 'Late', 'Total', ''].map((heading) => (
@@ -332,15 +277,7 @@ const WeeklyStats: React.FC = () => {
                     <td style={{ padding: '14px' }}>
                       <button
                         onClick={() => handleRemove(row.id)}
-                        style={{
-                          background: 'transparent',
-                          border: '1px solid #d7dde7',
-                          borderRadius: '10px',
-                          color: '#c0392b',
-                          padding: '8px 12px',
-                          cursor: 'pointer',
-                          fontSize: '13px'
-                        }}
+                        className="weekly-stats-remove-button"
                       >
                         Remove
                       </button>
