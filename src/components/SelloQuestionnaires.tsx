@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './SelloQuestionnaires.css';
+import jsPDF from 'jspdf';
+
+
 
 interface QuestionResponse {
   id: number;
@@ -26,6 +29,7 @@ const SelloQuestionnaires: React.FC = () => {
   const [emailLoading, setEmailLoading] = useState(false);
   const [emailStatus, setEmailStatus] = useState<{ type: 'success' | 'error' | null; message: string }>({ type: null, message: '' });
   const [submissionRecords, setSubmissionRecords] = useState<SubmissionRecord[]>([]);
+  const [viewPdfUrl, setViewPdfUrl] = useState<string | null>(null);
 
   useEffect(() => {
     loadRecordsFromStorage();
@@ -189,14 +193,19 @@ const SelloQuestionnaires: React.FC = () => {
   };
 
   const downloadRecordPDF = (record: SubmissionRecord) => {
-    const dataStr = record.pdfContent;
-    const dataBlob = new Blob([dataStr], { type: 'text/plain' });
-    const url = URL.createObjectURL(dataBlob);
+    const dataUri = record.pdfContent;
     const link = document.createElement('a');
-    link.href = url;
+    link.href = dataUri;
     link.download = `questionnaire-${record.recordId}.pdf`;
     link.click();
-    URL.revokeObjectURL(url);
+  };
+
+  const viewRecordPDF = (record: SubmissionRecord) => {
+    setViewPdfUrl(record.pdfContent);
+  };
+
+  const closePdfViewer = () => {
+    setViewPdfUrl(null);
   };
 
   const deleteRecord = (recordId: string) => {
@@ -206,18 +215,43 @@ const SelloQuestionnaires: React.FC = () => {
   };
 
   const generatePDF = (): string => {
-    let pdfContent = 'SELLO QUESTIONNAIRES - FEEDBACK REPORT\n';
-    pdfContent += '='.repeat(50) + '\n\n';
-    pdfContent += `Generated on: ${new Date().toLocaleString()}\n\n`;
+    const doc = new jsPDF();
+    
+    doc.setFontSize(20);
+    doc.text('SELLO QUESTIONNAIRES - FEEDBACK REPORT', 20, 30);
+    
+    doc.setFontSize(12);
+    doc.text(`Generated on: ${new Date().toLocaleString()}`, 20, 50);
+    
+    let yPosition = 70;
     
     responses.forEach((response, index) => {
-      pdfContent += `Question ${index + 1}:\n`;
-      pdfContent += `${response.question}\n\n`;
-      pdfContent += `Answer:\n${response.answer || '(No response provided)'}\n\n`;
-      pdfContent += '-'.repeat(50) + '\n\n';
+      if (yPosition > 250) { // Add new page if needed
+        doc.addPage();
+        yPosition = 30;
+      }
+      
+      doc.setFontSize(14);
+      doc.text(`Question ${index + 1}:`, 20, yPosition);
+      yPosition += 10;
+      
+      // Split question text to fit page width
+      const questionLines = doc.splitTextToSize(response.question, 170);
+      doc.setFontSize(12);
+      doc.text(questionLines, 20, yPosition);
+      yPosition += questionLines.length * 5 + 5;
+      
+      doc.setFontSize(12);
+      doc.text('Answer:', 20, yPosition);
+      yPosition += 10;
+      
+      const answerText = response.answer || '(No response provided)';
+      const answerLines = doc.splitTextToSize(answerText, 170);
+      doc.text(answerLines, 20, yPosition);
+      yPosition += answerLines.length * 5 + 15;
     });
-
-    return pdfContent;
+    
+    return doc.output('datauristring');
   };
 
   const handleSendEmail = async () => {
@@ -495,6 +529,12 @@ const SelloQuestionnaires: React.FC = () => {
 
                   <div className="record-actions">
                     <button 
+                      className="view-pdf-button"
+                      onClick={() => viewRecordPDF(record)}
+                    >
+                      👁️ View PDF
+                    </button>
+                    <button 
                       className="download-record-button"
                       onClick={() => downloadRecordPDF(record)}
                     >
@@ -524,6 +564,24 @@ const SelloQuestionnaires: React.FC = () => {
               ))}
             </div>
           )}
+        </div>
+      )}
+
+      {/* PDF Viewer Modal */}
+      {viewPdfUrl && (
+        <div className="pdf-viewer-modal">
+          <div className="pdf-viewer-header">
+            <h3>PDF Preview</h3>
+            <button className="close-pdf-button" onClick={closePdfViewer}>✕</button>
+          </div>
+          <div className="pdf-viewer-content">
+            <iframe
+              src={viewPdfUrl}
+              width="100%"
+              height="600px"
+              title="PDF Preview"
+            />
+          </div>
         </div>
       )}
     </div>
