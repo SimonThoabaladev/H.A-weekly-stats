@@ -207,7 +207,7 @@ const SelloQuestionnaires: React.FC = () => {
 
   const generatePDF = (): string => {
     let pdfContent = 'SELLO QUESTIONNAIRES - FEEDBACK REPORT\n';
-    pdfContent += '=' .repeat(50) + '\n\n';
+    pdfContent += '='.repeat(50) + '\n\n';
     pdfContent += `Generated on: ${new Date().toLocaleString()}\n\n`;
     
     responses.forEach((response, index) => {
@@ -249,7 +249,7 @@ const SelloQuestionnaires: React.FC = () => {
         throw new Error('Failed to send email');
       }
 
-      const data = await response.json();
+      await response.json();
       setEmailStatus({ 
         type: 'success', 
         message: `✓ Email sent successfully to sellosthoabala@gmail.com` 
