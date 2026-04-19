@@ -63,7 +63,7 @@ const SelloQuestionnaires: React.FC = () => {
     },
     {
       id: 2,
-      question: 'Tell me about the last time you got materials that prepare you for the exam and got a job online. Walk me through what happened from start to finish.',
+      question: 'Can you walk me through the last time you used online resources to prepare for an exam or look for a job? Start from the beginning—what did you do first?',
       answer: '',
       questionType: 'textarea'
     },
