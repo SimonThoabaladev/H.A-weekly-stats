@@ -1,20 +1,22 @@
 import React, { useState } from 'react';
-import WeeklyStats from './components/WeeklyStats';
+// import WeeklyStats from './components/WeeklyStats';
 import SelloQuestionnaires from './components/SelloQuestionnaires';
 
-type View = 'weekly' | 'questionnaires';
+// type View = 'weekly' | 'questionnaires';
+type View = 'questionnaires';
 
 const App: React.FC = () => {
-  const [currentView, setCurrentView] = useState<View>('weekly');
+  // const [currentView, setCurrentView] = useState<View>('weekly');
+  const [currentView, setCurrentView] = useState<View>('questionnaires');
 
   const renderView = () => {
     switch (currentView) {
-      case 'weekly':
-        return <WeeklyStats />;
+      // case 'weekly':
+      //   return <WeeklyStats />;
       case 'questionnaires':
         return <SelloQuestionnaires />;
       default:
-        return <WeeklyStats />;
+        return <SelloQuestionnaires />;
     }
   };
 
@@ -34,7 +36,7 @@ const App: React.FC = () => {
         top: 0,
         zIndex: 100
       }}>
-        <button
+        {/* <button
           onClick={() => setCurrentView('weekly')}
           style={{
             backgroundColor: currentView === 'weekly' ? '#3498db' : 'transparent',
@@ -60,7 +62,7 @@ const App: React.FC = () => {
           }}
         >
           📊 Weekly Statistics
-        </button>
+        </button> */}
         <button
           onClick={() => setCurrentView('questionnaires')}
           style={{
